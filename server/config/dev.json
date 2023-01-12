@@ -1,0 +1,7 @@
+{
+    "dbConfig":{
+        "db_Name": "testdb",
+        "db_UserName": "test",
+        "db_Password": "test"
+    }
+}

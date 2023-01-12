@@ -1,5 +1,4 @@
 function Stock() {
-    console.log("qwewas")
     return (
         <div>
             <table class="table">

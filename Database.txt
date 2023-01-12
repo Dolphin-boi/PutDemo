@@ -1,0 +1,33 @@
+create schema PutDemo;
+
+use PutDemo;
+
+create table vendor (
+	name varchar(50) primary key not null,
+    contact varchar(50),
+    email varchar(100),
+    address varchar(150)
+    );
+    
+create table metalType (
+	name varchar(50) primary key not null,
+    vendorName varchar(50)
+    );
+
+create table coil (
+	coilID int primary key auto_increment not null,
+    name varchar(100),
+    thickness float,
+    width float,
+    lenght float,
+    temper varchar(50),
+    coating varchar(50),
+    SF varchar(50),
+    location varchar(50),
+    status varchar(50),
+    updateTime datetime,
+    vendorName varchar(50),
+    coilType varchar(50),
+    FOREIGN KEY (vendorName) REFERENCES vendor(name),
+    FOREIGN KEY (coilType) REFERENCES metalType(name)
+    );

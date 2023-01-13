@@ -1,7 +1,8 @@
 {
     "dbConfig":{
-        "db_Name": "testdb",
-        "db_UserName": "test",
-        "db_Password": "test"
+        "db_Name": "putdemo",
+        "db_Host": "localhost",
+        "db_UserName": "root",
+        "db_Password": ""
     }
 }

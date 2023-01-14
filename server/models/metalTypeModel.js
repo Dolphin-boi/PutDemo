@@ -4,7 +4,6 @@ module.exports = ( sequelize , Sequelize ) => {
       {
           typeID: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true, field: 'typeID' },
           name: { type: Sequelize.STRING, allowNull: false, field: 'name' },
-          //vendorID: {type: Sequelize.INTEGER ,references:'vendor',referencesKey:'vendorID'}
       },
       {
           tableName: 'metaltype' 

@@ -24,6 +24,7 @@ db.sequelize = sequelize;
 db.coil = require("./models/coilModel")(sequelize, Sequelize);
 db.metalType = require("./models/metalTypeModel")(sequelize, Sequelize);
 db.vendor = require("./models/vendorModel")(sequelize, Sequelize);
+db.status = require("./models/statusModel")(sequelize, Sequelize);
 
 //ส่วนนี้เป็นการตั้งต่า relation นะครับ โดยเป็นการบอกว่าใน 1 team มีได้หลาย player ง่ายๆ ก็คือ relation แบบ 1:M
 db.metalType.hasMany(db.coil, {
@@ -37,7 +38,12 @@ db.coil.belongsTo(db.metalType, { foreignKey: "typeID" });
 db.vendor.hasMany(db.metalType, {
     foreignKey: { name: "vendorID", field: "vendorID" },
   });
-
 db.metalType.belongsTo(db.vendor, { foreignKey: "vendorID" });
+
+db.status.hasMany(db.coil,{
+  foreignKey:{name:'statusID',field:'statusID'}
+});
+db.coil.belongsTo(db.status,{ foreignKey: 'statusID'});
+
 
 module.exports = db;

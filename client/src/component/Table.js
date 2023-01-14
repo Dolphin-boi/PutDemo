@@ -1,8 +1,6 @@
 import axios from "axios"
 
-function StockTable() {
-
-    process.env.TZ = 'Asia/Bangkok'
+function Table() {
     
     return (
         <div className="m-3">
@@ -42,4 +40,4 @@ function StockTable() {
     )
 }
 
-export default StockTable;
+export default Table;

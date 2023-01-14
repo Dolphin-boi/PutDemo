@@ -3,31 +3,64 @@ create schema PutDemo;
 use PutDemo;
 
 create table vendor (
-	name varchar(50) primary key not null,
+	vendorID int auto_increment primary key,
+	name varchar(50) not null,
     contact varchar(50),
     email varchar(100),
     address varchar(150)
     );
     
 create table metalType (
-	name varchar(50) primary key not null,
-    vendorName varchar(50)
+	typeID int auto_increment primary key,
+	name varchar(50) not null,
+    vendorID int,
+    FOREIGN KEY (vendorID) REFERENCES vendor(vendorID)
     );
 
+create table temper (
+	temperID int auto_increment primary key,
+    name varchar(50)
+);
+
+create table coating (
+	coatID int auto_increment primary key,
+    name varchar(50)
+);
+
+create table sf (
+	sfID int auto_increment primary key,
+    name varchar(50)
+);
+
+create table location (
+	locationID int auto_increment primary key,
+    name varchar(50)
+);
+
+create table status (
+	statusID int auto_increment primary key,
+    name varchar(50)
+);
+
 create table coil (
-	coilID int primary key auto_increment not null,
-    name varchar(100),
+    coilID int primary key auto_increment not null,
+    name varchar(100) not null,
     thickness float,
     width float,
-    lenght float,
-    temper varchar(50),
-    coating varchar(50),
-    SF varchar(50),
-    location varchar(50),
-    status varchar(50),
+    length float,
+    weight float,
+    typeID int,
+    temperID int,
+    coatID int,
+    sfID int,
+    locationID int,
+    statusID int,
+    createTime datetime,
     updateTime datetime,
-    vendorName varchar(50),
-    coilType varchar(50),
-    FOREIGN KEY (vendorName) REFERENCES vendor(name),
-    FOREIGN KEY (coilType) REFERENCES metalType(name)
+    FOREIGN KEY (typeID) REFERENCES metalType(typeID),
+    FOREIGN KEY (temperID) REFERENCES temper(temperID),
+    FOREIGN KEY (coatID) REFERENCES coating(coatID),
+    FOREIGN KEY (sfID) REFERENCES sf(sfID),
+    FOREIGN KEY (locationID) REFERENCES location(locationID),
+    FOREIGN KEY (statusID) REFERENCES status(statusID)
     );

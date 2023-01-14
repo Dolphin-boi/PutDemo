@@ -4,9 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 import Header from './partial/Header';
 import Stock from './page/Stock.js';
-import AddCoil from './page/AddCoil';
+import AddCoil from './page/AddCoil.js';
 import Quotation from './page/Quotation.js';
 import reportWebVitals from './reportWebVitals';
+
+process.env.TZ = 'Asia/Bangkok'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

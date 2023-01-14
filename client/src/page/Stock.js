@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
-import StockTable from "../component/StockTable";
+import Table from "../component/Table";
 
 function Stock() {
 
@@ -11,7 +11,7 @@ function Stock() {
     const [metalType, setMetalType] = useState(0)
     // const [thickness, setThickness] = useState(0)
     // const [width, setWidth] = useState(0)
-    // const [lenght, setLenght] = useState(0)
+    // const [lenght, setLength] = useState(0)
 
     useEffect(() => {
         console.log(status, vendor, metalType)
@@ -58,7 +58,7 @@ function Stock() {
                 <button className="btn btn-primary">ค้นหา</button>
                 <hr></hr>
             </div>
-            <StockTable />
+            <Table />
         </div>
     )
 }

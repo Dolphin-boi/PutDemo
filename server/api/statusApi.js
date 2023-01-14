@@ -41,7 +41,7 @@ router
         const newStatus = await status.destroy({where:{statusID}})
         let deleteStatus = "delete status success"
         if(newStatus == 0 ){
-            deleteStatus = "this status already delete"
+            deleteStatus = "do not has this id"
         }
         successRes(res,deleteStatus)
     } catch (error) {

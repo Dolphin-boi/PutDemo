@@ -56,7 +56,26 @@ router
     try {
         const bodyInfo = req.body
         const newCoil = await coil.create({...bodyInfo})
-        successRes(res, newCoil);
+        const newCoilFullData = await coil.findByPk(newCoil.coilID,{
+          include: [
+            {
+              model: metalType,
+              required: true,
+              // attributes: ['name','vendorID'] ,
+              include: [
+                {
+                  model: vendor,
+                  required: true,
+                }
+              ]
+            },
+            {
+              model: status,
+              required: true
+            }
+          ]
+        })
+        successRes(res, newCoilFullData);
     } catch (error) {
         errorRes(res,error)
     }
@@ -65,10 +84,32 @@ router
     try {
         const coilID = req.params.id
         const bodyInfo = req.body
-        await coil.update({...bodyInfo},{ where:{coilID}})
+        let updatesStatus = "update success"
+        const isUpdate = await coil.update({...bodyInfo},{ where:{coilID}})
+        if(isUpdate == 0){
+          updatesStatus = "this coil id is not exist"
+        }
         //add status success or not 
-        const newStatus = await coil.findByPk(coilID)
-        successRes(res, newStatus);
+        const newCoil = await coil.findByPk(coilID,{
+          include: [
+            {
+              model: metalType,
+              required: true,
+              // attributes: ['name','vendorID'] ,
+              include: [
+                {
+                  model: vendor,
+                  required: true,
+                }
+              ]
+            },
+            {
+              model: status,
+              required: true
+            }
+          ]
+        })
+        successRes(res, {newCoil,updatesStatus});
     } catch (error) {
         errorRes(res,error)
     }

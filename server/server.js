@@ -2,6 +2,7 @@ const express = require("express");
 const config = require('config')
 const dbConfig = config.get('dbConfig')
 const coilApi = require("./api/coilApi")
+const statusApi = require("./api/statusApi")
 process.env.TZ = 'Asia/Bangkok'
 const app = express();
 const Sequelize = require("sequelize");
@@ -26,7 +27,7 @@ db.sequelize.sync();
 app
   .use(express.json())
   .use('/api/coil',coilApi)
-
+  .use('/api/status',statusApi)
 app.get("/test", async (req,res) => {
     info = await coil.findAll({include:[
       { model:metalType , 

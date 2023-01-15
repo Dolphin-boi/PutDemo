@@ -27,10 +27,15 @@ router
   .put("/:id",async (req,res) => {
     try {
         const statusID = req.params.id
+        req.body.statusID = null
         const bodyInfo = req.body
-        await status.update({...bodyInfo},{ where:{statusID}})
+        let updateStatus = "update success"
+        const isUpdate = await status.update({...bodyInfo},{ where:{statusID}})
+        if(isUpdate == 0){
+          updateStatus = "coil data not change"
+        }
         const newStatus = await status.findByPk(statusID)
-        successRes(res, newStatus);
+        successRes(res, {newStatus,updateStatus});
     } catch (error) {
         errorRes(res,error)
     }

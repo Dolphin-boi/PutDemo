@@ -4,12 +4,12 @@ const { errorRes, successRes } = require("../common/response");
 const config = require("config");
 const dbConfig = config.get("dbConfig.db_Name");
 const db = require("../db");
-const { status } = db;
+const { location } = db;
 
 router
   .get("/", async (req, res) => {
     try {
-      const data = await status.findAll();
+      const data = await location.findAll();
       successRes(res, data);
     } catch (error) {
       errorRes(res,error)
@@ -18,34 +18,34 @@ router
   .post("/",async (req,res) => {
     try {
         const bodyInfo = req.body
-        const newStatus = await status.create({...bodyInfo})
-        successRes(res, newStatus);
+        const newLocation = await location.create({...bodyInfo})
+        successRes(res, newLocation);
     } catch (error) {
         errorRes(res,error)
     }
   })
   .put("/:id",async (req,res) => {
     try {
-        const statusID = req.params.id
-        req.body.statusID = null
+        const locationID = req.params.id
+        req.body.locationID = null
         const bodyInfo = req.body
         let updateStatus = "update success"
-        const isUpdate = await status.update({...bodyInfo},{ where:{statusID}})
+        const isUpdate = await location.update({...bodyInfo},{ where:{locationID}})
         if(isUpdate == 0){
           updateStatus = "data not change"
         }
-        const newStatus = await status.findByPk(statusID)
-        successRes(res, {newStatus,updateStatus});
+        const newLocation = await location.findByPk(locationID)
+        successRes(res, {newLocation,updateStatus});
     } catch (error) {
         errorRes(res,error)
     }
   })
   .delete("/:id",async (req,res) => {
     try {
-        const statusID = req.params.id
-        const newStatus = await status.destroy({where:{statusID}})
-        let deleteStatus = "delete status success"
-        if(newStatus == 0 ){
+        const locationID = req.params.id
+        const newLocation = await location.destroy({where:{locationID}})
+        let deleteStatus = "delete location success"
+        if(newLocation == 0 ){
             deleteStatus = "do not has this id"
         }
         successRes(res,deleteStatus)

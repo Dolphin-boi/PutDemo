@@ -4,12 +4,12 @@ const { errorRes, successRes } = require("../common/response");
 const config = require("config");
 const dbConfig = config.get("dbConfig.db_Name");
 const db = require("../db");
-const { status } = db;
+const { temper } = db;
 
 router
   .get("/", async (req, res) => {
     try {
-      const data = await status.findAll();
+      const data = await temper.findAll();
       successRes(res, data);
     } catch (error) {
       errorRes(res,error)
@@ -18,34 +18,34 @@ router
   .post("/",async (req,res) => {
     try {
         const bodyInfo = req.body
-        const newStatus = await status.create({...bodyInfo})
-        successRes(res, newStatus);
+        const newtemper = await temper.create({...bodyInfo})
+        successRes(res, newtemper);
     } catch (error) {
         errorRes(res,error)
     }
   })
   .put("/:id",async (req,res) => {
     try {
-        const statusID = req.params.id
-        req.body.statusID = null
+        const temperID = req.params.id
+        req.body.temperID = null
         const bodyInfo = req.body
         let updateStatus = "update success"
-        const isUpdate = await status.update({...bodyInfo},{ where:{statusID}})
+        const isUpdate = await temper.update({...bodyInfo},{ where:{temperID}})
         if(isUpdate == 0){
           updateStatus = "data not change"
         }
-        const newStatus = await status.findByPk(statusID)
-        successRes(res, {newStatus,updateStatus});
+        const newtemper = await temper.findByPk(temperID)
+        successRes(res, {newtemper,updateStatus});
     } catch (error) {
         errorRes(res,error)
     }
   })
   .delete("/:id",async (req,res) => {
     try {
-        const statusID = req.params.id
-        const newStatus = await status.destroy({where:{statusID}})
-        let deleteStatus = "delete status success"
-        if(newStatus == 0 ){
+        const temperID = req.params.id
+        const newtemper = await temper.destroy({where:{temperID}})
+        let deleteStatus = "delete temper success"
+        if(newtemper == 0 ){
             deleteStatus = "do not has this id"
         }
         successRes(res,deleteStatus)

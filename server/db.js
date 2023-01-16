@@ -21,10 +21,15 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 //ส่วนนี้เป็นการ import model ของ table ใน database เข้ามาเพื่อตั้งต่า relation นะครับ
+db.coating = require("./models/coatingModel")(sequelize, Sequelize);
 db.coil = require("./models/coilModel")(sequelize, Sequelize);
+db.location = require("./models/locationModel")(sequelize, Sequelize);
 db.metalType = require("./models/metalTypeModel")(sequelize, Sequelize);
-db.vendor = require("./models/vendorModel")(sequelize, Sequelize);
+db.sf = require("./models/sfModel")(sequelize,Sequelize);
 db.status = require("./models/statusModel")(sequelize, Sequelize);
+db.temper = require("./models/temperModel")(sequelize, Sequelize);
+db.vendor = require("./models/vendorModel")(sequelize, Sequelize);
+
 
 //ส่วนนี้เป็นการตั้งต่า relation นะครับ โดยเป็นการบอกว่าใน 1 team มีได้หลาย player ง่ายๆ ก็คือ relation แบบ 1:M
 db.metalType.hasMany(db.coil, {
@@ -40,10 +45,35 @@ db.vendor.hasMany(db.metalType, {
   });
 db.metalType.belongsTo(db.vendor, { foreignKey: "vendorID" });
 
+
 db.status.hasMany(db.coil,{
   foreignKey:{name:'statusID',field:'statusID'}
 });
 db.coil.belongsTo(db.status,{ foreignKey: 'statusID'});
+
+
+db.temper.hasMany(db.coil,{
+  foreignKey:{name:'temperID',field:'temperID'}
+});
+db.coil.belongsTo(db.temper,{foreignKey:'temperID'});
+
+
+db.coating.hasMany(db.coil,{
+  foreignKey:{name:'coatID',field:'coatID'}
+});
+db.coil.belongsTo(db.coating,{foreignKey:'coatID'});
+
+
+db.sf.hasMany(db.coil,{
+  foreignKey:{name:'sfID',field:'sfID'}
+});
+db.coil.belongsTo(db.sf,{foreignKey:'sfID'});
+
+
+db.location.hasMany(db.coil,{
+  foreignKey:{name:'locationID',field:'locationID'}
+});
+db.coil.belongsTo(db.location,{foreignKey:'locationID'})
 
 
 module.exports = db;

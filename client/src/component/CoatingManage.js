@@ -2,10 +2,7 @@ import { useState } from "react";
 
 function CoatingManage() {
 
-    const [name, setName] = useState(0)
-    const [contact, setContact] = useState(0)
-    const [email, setEmail] = useState(0)
-    const [address, setAddress] = useState(0)
+    const [coating, setCoating] = useState(0)
 
     return (
         <>
@@ -17,33 +14,13 @@ function CoatingManage() {
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <h4>เพิ่มประเภทเหล็ก</h4>
+                            <h4>เพิ่มประเภทCoating</h4>
                             <div className="row">
-                                <div className="col">
-                                    <label>ชื่อประเภทเหล็ก</label>
+                                <div className="col-6">
+                                    <label>ชื่อประเภทCoating</label>
                                     <input className="form-control" onChange={event => {
-                                        setName(event.target.value)
+                                        setCoating(event.target.value)
                                     }}></input>
-                                </div>
-                                <div className="col">
-                                    <label>เบอร์โทร</label>
-                                    <input className="form-control" onChange={event => {
-                                        setContact(event.target.value)
-                                    }}></input>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <label>email</label>
-                                    <input className="form-control" onChange={event => {
-                                        setEmail(event.target.value)
-                                    }}></input>
-                                </div>
-                                <div className="col">
-                                    <label>ที่อยู่</label>
-                                    <textarea className="form-control" onChange={event => {
-                                        setAddress(event.target.value)
-                                    }}></textarea>
                                 </div>
                             </div>
                             <div className="text-end">
@@ -99,31 +76,11 @@ function CoatingManage() {
                         </div>
                         <div class="modal-body">
                             <div className="row">
-                                <div className="col">
-                                    <label>ชื่อผู้ผลิต</label>
+                                <div className="col-6">
+                                    <label>ชื่อประเภทCoating</label>
                                     <input className="form-control" onChange={event => {
-                                        setName(event.target.value)
+                                        setCoating(event.target.value)
                                     }}></input>
-                                </div>
-                                <div className="col">
-                                    <label>เบอร์โทร</label>
-                                    <input className="form-control" onChange={event => {
-                                        setContact(event.target.value)
-                                    }}></input>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <label>email</label>
-                                    <input className="form-control" onChange={event => {
-                                        setEmail(event.target.value)
-                                    }}></input>
-                                </div>
-                                <div className="col">
-                                    <label>ที่อยู่</label>
-                                    <textarea className="form-control" onChange={event => {
-                                        setAddress(event.target.value)
-                                    }}></textarea>
                                 </div>
                             </div>
                         </div>

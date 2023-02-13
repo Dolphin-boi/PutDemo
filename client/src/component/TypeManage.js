@@ -2,10 +2,8 @@ import { useState } from "react";
 
 function TypeManage() {
 
-    const [name, setName] = useState(0)
-    const [contact, setContact] = useState(0)
-    const [email, setEmail] = useState(0)
-    const [address, setAddress] = useState(0)
+    const [vendor, setVendor] = useState(0)
+    const [metalType, setMetalType] = useState(0)
 
     return (
         <>
@@ -17,33 +15,23 @@ function TypeManage() {
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <h4>เพิ่มประเภทเหล็ก</h4>
+                        <h4>เพิ่มประเภทเหล็ก</h4>
                             <div className="row">
+                                <div className="col">
+                                    <label>ผู้ผลิต</label>
+                                    <select className="form-select col" onChange={event => {
+                                        setVendor(event.target.value)
+                                    }}>
+                                        <option defaultValue="0" value="0">ทั้งหมด</option>
+                                        <option value="TCC">TCC</option>
+                                        <option value="TTP">TTP</option>
+                                    </select>
+                                </div>
                                 <div className="col">
                                     <label>ชื่อประเภทเหล็ก</label>
                                     <input className="form-control" onChange={event => {
-                                        setName(event.target.value)
+                                        setMetalType(event.target.value)
                                     }}></input>
-                                </div>
-                                <div className="col">
-                                    <label>เบอร์โทร</label>
-                                    <input className="form-control" onChange={event => {
-                                        setContact(event.target.value)
-                                    }}></input>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <label>email</label>
-                                    <input className="form-control" onChange={event => {
-                                        setEmail(event.target.value)
-                                    }}></input>
-                                </div>
-                                <div className="col">
-                                    <label>ที่อยู่</label>
-                                    <textarea className="form-control" onChange={event => {
-                                        setAddress(event.target.value)
-                                    }}></textarea>
                                 </div>
                             </div>
                             <div className="text-end">
@@ -98,32 +86,22 @@ function TypeManage() {
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
-                            <div className="row">
+                        <div className="row">
                                 <div className="col">
-                                    <label>ชื่อผู้ผลิต</label>
-                                    <input className="form-control" onChange={event => {
-                                        setName(event.target.value)
-                                    }}></input>
+                                    <label>ผู้ผลิต</label>
+                                    <select className="form-select col" onChange={event => {
+                                        setVendor(event.target.value)
+                                    }}>
+                                        <option defaultValue="0" value="0">ทั้งหมด</option>
+                                        <option value="TCC">TCC</option>
+                                        <option value="TTP">TTP</option>
+                                    </select>
                                 </div>
                                 <div className="col">
-                                    <label>เบอร์โทร</label>
+                                    <label>ชื่อประเภทเหล็ก</label>
                                     <input className="form-control" onChange={event => {
-                                        setContact(event.target.value)
+                                        setMetalType(event.target.value)
                                     }}></input>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <label>email</label>
-                                    <input className="form-control" onChange={event => {
-                                        setEmail(event.target.value)
-                                    }}></input>
-                                </div>
-                                <div className="col">
-                                    <label>ที่อยู่</label>
-                                    <textarea className="form-control" onChange={event => {
-                                        setAddress(event.target.value)
-                                    }}></textarea>
                                 </div>
                             </div>
                         </div>

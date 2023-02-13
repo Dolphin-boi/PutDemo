@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors")
 const config = require('config')
 const dbConfig = config.get('dbConfig')
 const coilApi = require("./api/coilApi")
@@ -32,6 +33,7 @@ db.sequelize.sync();
 //   console.error('Unable to connect to the database: ', error);
 // });
 app
+  .use(cors("*"))
   .use(express.json())
   .use('/api/coil',coilApi)
   .use('/api/status',statusApi)

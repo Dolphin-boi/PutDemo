@@ -1,0 +1,30 @@
+use Putdemo;
+
+insert into vendor(name, contact, email, address) values ("TCC", "02-1xx-xxxx", "TCC@xxx.com", "1x xxxxx 74000");
+insert into vendor(name, contact, email, address) values ("TTP", "02-2xx-xxxx", "TTP@xxx.com", "2x xxxxx 10150");
+
+insert into metalType(name, vendorID) values ("TPPC-TCC-BOSTON", 1);
+insert into metalType(name, vendorID) values ("TPPC-TCC-เมกา", 1);
+insert into metalType(name, vendorID) values ("TPPC-TTP-PANA", 2);
+insert into metalType(name, vendorID) values ("TPPC-TTP-BOSTON", 2);
+
+insert into status(name) values ("คงคลัง");
+insert into status(name) values ("ขายแล้ว");
+
+insert into temper(name) values ("T3ULCA");
+insert into temper(name) values ("T1");
+insert into temper(name) values ("T2");
+insert into temper(name) values ("T3");
+
+insert into coating(name) values ("50/50");
+insert into coating(name) values ("25/25");
+insert into coating(name) values ("75/25");
+
+insert into sf(name) values ("SF");
+insert into sf(name) values ("BF");
+
+insert into location(name) values ("BPS");
+insert into location(name) values ("PSC");
+insert into location(name) values ("SIRI");
+
+insert into coil(name, thickness, width, length, weight, typeID, temperID, coatID, sfID, locationID, statusID, createTime, updateTime) values ("TPPC-TCC-BOSTON-7190", 0.23, 770, 0, 7190, 1, 1, 2, 1, 1, null, null);

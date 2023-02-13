@@ -12,13 +12,13 @@ function AddCoil() {
     const [thickness, setThickness] = useState(0)
     const [temper, setTemper] = useState(0)
     const [coating, setCoating] = useState(0)
-    const [sf, setSF] = useState(0)
+    const [hardness, setHardness] = useState(0)
     const [width, setWidth] = useState(0)
     const [lenght, setLength] = useState(0)
     const [weight, setWeight] = useState(0)
 
     useEffect(() => {
-        console.log(vendor, metalType, thickness, width, lenght, weight, temper, coating, sf)
+        console.log(vendor, metalType, thickness, width, lenght, weight, temper, coating, hardness)
     })
     return (
         <>
@@ -89,7 +89,7 @@ function AddCoil() {
                                 <label className="form-label">ความแข็ง</label>
                                 <div className="input-group">
                                     <select className="form-select col" onChange={event => {
-                                        setSF(event.target.value)
+                                        setHardness(event.target.value)
                                     }}>
                                         <option defaultValue="0" value="0">ทั้งหมด</option>
                                         <option value="T3ULCA">T3ULCA</option>

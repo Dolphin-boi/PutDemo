@@ -1,11 +1,27 @@
-import axios from "axios"
-import { useEffect, useState } from "react";
+import Axios from "axios"
+import { useEffect, useState, createContext } from "react";
 import Table from "../component/Table";
+
+const coilContext = createContext()
 
 function Stock() {
 
+    const url = "http://localhost:8080/api/coil"
+
+    const getStockList = () => {
+        Axios({
+          method: "GET",
+          url: url
+        }).then((res) => {
+          if (res.data.success) {
+            setCoilList(res.data.data)
+          }
+        })
+      }
+
     process.env.TZ = 'Asia/Bangkok'
 
+    const [coilList, setCoilList] = useState([])
     const [status, setStatus] = useState(1)
     const [vendor, setVendor] = useState(0)
     const [metalType, setMetalType] = useState(0)
@@ -14,8 +30,8 @@ function Stock() {
     // const [lenght, setLength] = useState(0)
 
     useEffect(() => {
-        console.log(status, vendor, metalType)
-    })
+        getStockList()
+    }, [])
     return (
         <div className="m-3 card">
             <div className="m-3">
@@ -58,9 +74,12 @@ function Stock() {
                 <button className="btn btn-primary">ค้นหา</button>
                 <hr></hr>
             </div>
-            <Table />
+            <coilContext.Provider value={{coilList}}>
+                <Table />
+            </coilContext.Provider>
         </div>
     )
 }
 
+export { coilContext }
 export default Stock;

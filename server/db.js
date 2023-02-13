@@ -33,12 +33,12 @@ db.vendor = require("./models/vendorModel")(sequelize, Sequelize);
 
 //ส่วนนี้เป็นการตั้งต่า relation นะครับ โดยเป็นการบอกว่าใน 1 team มีได้หลาย player ง่ายๆ ก็คือ relation แบบ 1:M
 db.metalType.hasMany(db.coil, {
-  foreignKey: { name: "typeID", field: "typeID" },
+  foreignKey: { name: "typeID", field: "typeID" }
 });
 
 //ส่วนนี้เป็นการตั้ง relation แบบกลับกันกับด้านบน จริงแล้วเราไม่ตั้งก็ได้นะครับแต่ผมแนะนำให้ตั้งเอาไว้ เพราะเวลาที่เราไม่ได้ใส่
 //line นี้จะทำให้เราสามารถใช้  team ในการหา player ได้อย่างเดียวและไม่สามารถใช้ player หา team ได้
-db.coil.belongsTo(db.metalType, { foreignKey: "typeID" ,defaultValue: 1 });
+db.coil.belongsTo(db.metalType, { foreignKey: "typeID" });
 
 db.vendor.hasMany(db.metalType, {
     foreignKey: { name: "vendorID", field: "vendorID" },
@@ -49,7 +49,7 @@ db.metalType.belongsTo(db.vendor, { foreignKey: "vendorID" });
 db.status.hasMany(db.coil,{
   foreignKey:{name:'statusID',field:'statusID'}
 });
-db.coil.belongsTo(db.status,{ foreignKey: 'statusID'});
+db.coil.belongsTo(db.status,{ foreignKey: 'statusID',allowNull: false,defaultValue: 1});
 
 
 db.temper.hasMany(db.coil,{

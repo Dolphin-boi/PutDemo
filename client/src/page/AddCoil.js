@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import Axios from "axios"
+import { useEffect, useState, createContext } from "react";
 import VendorManage from "../component/VendorManage";
 import TypeManage from "../component/TypeManage";
 import TemperManage from "../component/TemperManage";
@@ -6,6 +7,98 @@ import CoatingManage from "../component/CoatingManage";
 import HardnessManage from "../component/HardnessManage";
 
 function AddCoil() {
+
+    const url = "http://localhost:8080"
+
+    const getVendorList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/vendor"
+        }).then((res) => {
+            if (res.data.success) {
+                setVendorList(res.data.data)
+                setVendor(res.data.data[0].vendorID)
+            }
+        })
+    }
+
+    const getMetalTypeList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/metalType"
+        }).then((res) => {
+            if (res.data.success) {
+                setMetalTypeList(res.data.data)
+                setMetalType(res.data.data[0].typeID)
+            }
+        })
+    }
+
+    const getTemperList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/temper"
+        }).then((res) => {
+            if (res.data.success) {
+                setTemperList(res.data.data)
+                setTemper(res.data.data[0].temperID)
+            }
+        })
+    }
+
+    const getCoatingList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/coating"
+        }).then((res) => {
+            if (res.data.success) {
+                setCoatingList(res.data.data)
+                setCoating(res.data.data[0].coatID)
+            }
+        })
+    }
+
+    const getHardnessList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/sf"
+        }).then((res) => {
+            if (res.data.success) {
+                setHardnessList(res.data.data)
+                setHardness(res.data.data[0].sfID)
+            }
+        })
+    }
+
+    const addNewCoil = () => {
+        Axios({
+            method: "POST",
+            url: url + "/api/coil",
+            data: {
+                name: metalTypeList[metalType].name + "-" + weight,
+                thickness: thickness,
+                width: width,
+                length: lenght,
+                weight: weight,
+                typeID: metalType,
+                vendorID: vendor,
+                temperID: temper,
+                coatID: coating,
+                sfID: hardness,
+                statusID: 1 /* แก้ขัด */
+            }
+        }).then((res) => {
+            if (res.data.success) {
+                console.log(res.data)
+            }
+        })
+    }
+
+    const [vendorList, setVendorList] = useState([])
+    const [metalTypeList, setMetalTypeList] = useState([])
+    const [temperList, setTemperList] = useState([])
+    const [coatingList, setCoatingList] = useState([])
+    const [hardnessList, setHardnessList] = useState([])
 
     const [vendor, setVendor] = useState(0)
     const [metalType, setMetalType] = useState(0)
@@ -18,8 +111,17 @@ function AddCoil() {
     const [weight, setWeight] = useState(0)
 
     useEffect(() => {
-        console.log(vendor, metalType, thickness, width, lenght, weight, temper, coating, hardness)
+        // console.log(vendor, metalType, thickness, width, lenght, weight, temper, coating, hardness)
+        // console.log()
     })
+
+    useEffect(() => {
+        getVendorList()
+        getMetalTypeList()
+        getTemperList()
+        getCoatingList()
+        getHardnessList()
+    }, [])
     return (
         <>
             <div className="m-3 card">
@@ -32,15 +134,24 @@ function AddCoil() {
                         <div className="row my-2">
                             <div className="col">
                                 <label className="form-label">ผู้ผลิต</label>
-                                <div class="input-group">
+                                <div className="input-group">
                                     <select className="form-select col" onChange={event => {
                                         setVendor(event.target.value)
                                     }}>
-                                        <option defaultValue="0" value="0">ทั้งหมด</option>
-                                        <option value="TCC">TCC</option>
-                                        <option value="TTP">TTP</option>
+                                        {vendorList.map((value, key) => {
+                                            if (key == 0) {
+                                                return (
+                                                    <option defaultValue={value.vendorID} value={value.vendorID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={value.vendorID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                        })}
                                     </select>
-                                    <button type="button" class="input-group-text" data-bs-toggle="modal" data-bs-target="#vendorManage">เพิ่ม</button>
+                                    <button type="button" className="input-group-text" data-bs-toggle="modal" data-bs-target="#vendorManage">เพิ่ม</button>
                                 </div>
                             </div>
                             <div className="col">
@@ -49,11 +160,20 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setMetalType(event.target.value)
                                     }}>
-                                        <option defaultValue="0" value="0">ทั้งหมด</option>
-                                        <option value="TPPC-TCC-BOSTON">TPPC-TCC-BOSTON</option>
-                                        <option value="TPPC-TTP-TY">TPPC-TTP-TY</option>
+                                        {metalTypeList.map((value, key) => {
+                                            if (key == 0) {
+                                                return (
+                                                    <option defaultValue={value.typeID} value={value.typeID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={value.typeID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                        })}
                                     </select>
-                                    <button type="button" class="input-group-text" data-bs-toggle="modal" data-bs-target="#typeManage">เพิ่ม</button>
+                                    <button type="button" className="input-group-text" data-bs-toggle="modal" data-bs-target="#typeManage">เพิ่ม</button>
                                 </div>
                             </div>
                         </div>
@@ -65,11 +185,20 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setTemper(event.target.value)
                                     }}>
-                                        <option defaultValue="0" value="0">ทั้งหมด</option>
-                                        <option value="T3ULCA">T3ULCA</option>
-                                        <option value="T2">T2</option>
+                                        {temperList.map((value, key) => {
+                                            if (key == 0) {
+                                                return (
+                                                    <option defaultValue={value.temperID} value={value.temperID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={value.temperID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                        })}
                                     </select>
-                                    <button type="button" class="input-group-text" data-bs-toggle="modal" data-bs-target="#temperManage">เพิ่ม</button>
+                                    <button type="button" className="input-group-text" data-bs-toggle="modal" data-bs-target="#temperManage">เพิ่ม</button>
                                 </div>
                             </div>
                             <div className="col">
@@ -78,11 +207,20 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setCoating(event.target.value)
                                     }}>
-                                        <option defaultValue="0" value="0">ทั้งหมด</option>
-                                        <option value="T3ULCA">T3ULCA</option>
-                                        <option value="T2">T2</option>
+                                        {coatingList.map((value, key) => {
+                                            if (key == 0) {
+                                                return (
+                                                    <option defaultValue={value.coatID} value={value.coatID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={value.coatID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                        })}
                                     </select>
-                                    <button type="button" class="input-group-text" data-bs-toggle="modal" data-bs-target="#coatingManage">เพิ่ม</button>
+                                    <button type="button" className="input-group-text" data-bs-toggle="modal" data-bs-target="#coatingManage">เพิ่ม</button>
                                 </div>
                             </div>
                             <div className="col">
@@ -91,11 +229,20 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setHardness(event.target.value)
                                     }}>
-                                        <option defaultValue="0" value="0">ทั้งหมด</option>
-                                        <option value="T3ULCA">T3ULCA</option>
-                                        <option value="T2">T2</option>
+                                        {hardnessList.map((value, key) => {
+                                            if (key == 0) {
+                                                return (
+                                                    <option defaultValue={value.sfID} value={value.sfID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={value.sfID} key={key}>{value.name}</option>
+                                                )
+                                            }
+                                        })}
                                     </select>
-                                    <button type="button" class="input-group-text" data-bs-toggle="modal" data-bs-target="#hardnessManage">เพิ่ม</button>
+                                    <button type="button" className="input-group-text" data-bs-toggle="modal" data-bs-target="#hardnessManage">เพิ่ม</button>
                                 </div>
                             </div>
                         </div>
@@ -129,17 +276,17 @@ function AddCoil() {
                     </form>
                     <div className="text-end">
                         <button className="btn btn-success my-2" onClick={event => {
-                            console.log("test")
+                            addNewCoil()
                         }}>เพิ่ม</button>
                     </div>
                 </div>
             </div>
 
             <VendorManage />
-            <TypeManage />
+            {/* <TypeManage />
             <TemperManage />
             <CoatingManage />
-            <HardnessManage />
+            <HardnessManage /> */}
         </>
     )
 }

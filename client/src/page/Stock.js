@@ -6,12 +6,12 @@ const coilContext = createContext()
 
 function Stock() {
 
-    const url = "http://localhost:8080/api/coil"
+    const url = "http://localhost:8080"
 
     const getStockList = () => {
         Axios({
           method: "GET",
-          url: url
+          url: url + "/api/coil"
         }).then((res) => {
           if (res.data.success) {
             setCoilList(res.data.data)

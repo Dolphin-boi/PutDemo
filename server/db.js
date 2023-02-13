@@ -38,7 +38,7 @@ db.metalType.hasMany(db.coil, {
 
 //ส่วนนี้เป็นการตั้ง relation แบบกลับกันกับด้านบน จริงแล้วเราไม่ตั้งก็ได้นะครับแต่ผมแนะนำให้ตั้งเอาไว้ เพราะเวลาที่เราไม่ได้ใส่
 //line นี้จะทำให้เราสามารถใช้  team ในการหา player ได้อย่างเดียวและไม่สามารถใช้ player หา team ได้
-db.coil.belongsTo(db.metalType, { foreignKey: "typeID" });
+db.coil.belongsTo(db.metalType, { foreignKey: "typeID" ,defaultValue: 1 });
 
 db.vendor.hasMany(db.metalType, {
     foreignKey: { name: "vendorID", field: "vendorID" },

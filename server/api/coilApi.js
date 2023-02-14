@@ -83,7 +83,7 @@ router
   .put("/:id",async (req,res) => {
     try {
         const coilID = req.params.id
-        req.body.coilID = null
+        req.body.coilID = coilID
         const bodyInfo = req.body
         let updateStatus = "update success"
         const isUpdate = await coil.update({...bodyInfo},{ where:{coilID}})

@@ -27,7 +27,7 @@ router
   .put("/:id",async (req,res) => {
     try {
         const locationID = req.params.id
-        req.body.locationID = null
+        req.body.locationID = locationID
         const bodyInfo = req.body
         let updateStatus = "update success"
         const isUpdate = await location.update({...bodyInfo},{ where:{locationID}})

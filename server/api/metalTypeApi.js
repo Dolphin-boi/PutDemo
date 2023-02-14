@@ -42,7 +42,7 @@ router
   .put("/:id",async (req,res) => {
     try {
         const metalTypeID = req.params.id
-        req.body.metalTypeID = null
+        req.body.metalTypeID = metalTypeID
         const bodyInfo = req.body
         let updateStatus = "update success"
         const isUpdate = await metalType.update({...bodyInfo},{ where:{metalTypeID}})

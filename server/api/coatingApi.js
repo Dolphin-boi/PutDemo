@@ -27,7 +27,7 @@ router
   .put("/:id",async (req,res) => {
     try {
         const coatingID = req.params.id
-        req.body.coatingID = null
+        req.body.coatingID = coatingID
         const bodyInfo = req.body
         let updateStatus = "update success"
         const isUpdate = await coating.update({...bodyInfo},{ where:{coatingID}})

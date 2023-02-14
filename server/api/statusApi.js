@@ -27,7 +27,7 @@ router
   .put("/:id",async (req,res) => {
     try {
         const statusID = req.params.id
-        req.body.statusID = null
+        req.body.statusID = statusID
         const bodyInfo = req.body
         let updateStatus = "update success"
         const isUpdate = await status.update({...bodyInfo},{ where:{statusID}})

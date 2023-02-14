@@ -27,7 +27,7 @@ router
   .put("/:id",async (req,res) => {
     try {
         const temperID = req.params.id
-        req.body.temperID = null
+        req.body.temperID = temperID
         const bodyInfo = req.body
         let updateStatus = "update success"
         const isUpdate = await temper.update({...bodyInfo},{ where:{temperID}})

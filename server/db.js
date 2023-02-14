@@ -47,7 +47,7 @@ db.metalType.belongsTo(db.vendor, { foreignKey: "vendorID" });
 
 
 db.status.hasMany(db.coil,{
-  foreignKey:{name:'statusID',field:'statusID'}
+  foreignKey:{name:'statusID',field:'statusID',allowNull: false,defaultValue: 1}
 });
 db.coil.belongsTo(db.status,{ foreignKey: 'statusID',allowNull: false,defaultValue: 1});
 

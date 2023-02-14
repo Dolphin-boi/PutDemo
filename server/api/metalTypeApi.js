@@ -26,14 +26,15 @@ router
     try {
         const bodyInfo = req.body
         const newmetalType = await metalType.create({...bodyInfo})
-        const newmetalTypeFullData = await metalType.findByPk(newmetalType.metalTypeID,{
+        const newmetalTypeFullData = await metalType.findByPk(newmetalType.typeID,{
             include:[
                 {
                     model:vendor,
                     required:true
                 }
             ]
-          })
+          }
+          )
         successRes(res, newmetalTypeFullData);
     } catch (error) {
         errorRes(res,error)
@@ -41,15 +42,15 @@ router
   })
   .put("/:id",async (req,res) => {
     try {
-        const metalTypeID = req.params.id
-        req.body.metalTypeID = metalTypeID
+        const typeID = req.params.id
+        req.body.typeID = typeID
         const bodyInfo = req.body
         let updateStatus = "update success"
-        const isUpdate = await metalType.update({...bodyInfo},{ where:{metalTypeID}})
+        const isUpdate = await metalType.update({...bodyInfo},{ where:{typeID}})
         if(isUpdate == 0){
           updateStatus = "data not change"
         }
-        const newmetalType = await metalType.findByPk(metalTypeID,{
+        const newmetalType = await metalType.findByPk(typeID,{
             include:[
                 {
                     model:vendor,
@@ -64,8 +65,8 @@ router
   })
   .delete("/:id",async (req,res) => {
     try {
-        const metalTypeID = req.params.id
-        const newmetalType = await metalType.destroy({where:{metalTypeID}})
+        const typeID = req.params.id
+        const newmetalType = await metalType.destroy({where:{typeID}})
         let deleteStatus = "delete metalType success"
         if(newmetalType == 0 ){
             deleteStatus = "do not has this id"

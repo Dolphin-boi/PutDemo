@@ -6,6 +6,8 @@ import TemperManage from "../component/TemperManage";
 import CoatingManage from "../component/CoatingManage";
 import HardnessManage from "../component/HardnessManage";
 
+const listContext = createContext()
+
 function AddCoil() {
 
     const url = "http://localhost:8080"
@@ -17,7 +19,7 @@ function AddCoil() {
         }).then((res) => {
             if (res.data.success) {
                 setVendorList(res.data.data)
-                setVendor(res.data.data[0].vendorID)
+                setMetalType(res.data.data[0].vendorID)
             }
         })
     }
@@ -85,7 +87,7 @@ function AddCoil() {
                 temperID: temper,
                 coatID: coating,
                 sfID: hardness,
-                statusID: 1 /* แก้ขัด */
+                // statusID: 1 /* แก้ขัด */
             }
         }).then((res) => {
             if (res.data.success) {
@@ -112,7 +114,6 @@ function AddCoil() {
 
     useEffect(() => {
         // console.log(vendor, metalType, thickness, width, lenght, weight, temper, coating, hardness)
-        // console.log()
     })
 
     useEffect(() => {
@@ -138,15 +139,15 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setVendor(event.target.value)
                                     }}>
-                                        {vendorList.map((value, key) => {
-                                            if (key == 0) {
+                                        {vendorList.map((val, key) => {
+                                            if (key === 0) {
                                                 return (
-                                                    <option defaultValue={value.vendorID} value={value.vendorID} key={key}>{value.name}</option>
+                                                    <option defaultValue={val.vendorID} value={val.vendorID} key={key}>{val.name}</option>
                                                 )
                                             }
                                             else {
                                                 return (
-                                                    <option value={value.vendorID} key={key}>{value.name}</option>
+                                                    <option value={val.vendorID} key={key}>{val.name}</option>
                                                 )
                                             }
                                         })}
@@ -160,15 +161,16 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setMetalType(event.target.value)
                                     }}>
-                                        {metalTypeList.map((value, key) => {
-                                            if (key == 0) {
+                                        {metalTypeList.map((val, key) => {
+                                            if (key === 0) {
+
                                                 return (
-                                                    <option defaultValue={value.typeID} value={value.typeID} key={key}>{value.name}</option>
+                                                    <option defaultValue={val.typeID} value={val.typeID} key={key}>{val.name}</option>
                                                 )
                                             }
                                             else {
                                                 return (
-                                                    <option value={value.typeID} key={key}>{value.name}</option>
+                                                    <option value={val.typeID} key={key}>{val.name}</option>
                                                 )
                                             }
                                         })}
@@ -185,15 +187,15 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setTemper(event.target.value)
                                     }}>
-                                        {temperList.map((value, key) => {
-                                            if (key == 0) {
+                                        {temperList.map((val, key) => {
+                                            if (key === 0) {
                                                 return (
-                                                    <option defaultValue={value.temperID} value={value.temperID} key={key}>{value.name}</option>
+                                                    <option defaultValue={val.temperID} value={val.temperID} key={key}>{val.name}</option>
                                                 )
                                             }
                                             else {
                                                 return (
-                                                    <option value={value.temperID} key={key}>{value.name}</option>
+                                                    <option value={val.temperID} key={key}>{val.name}</option>
                                                 )
                                             }
                                         })}
@@ -207,15 +209,15 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setCoating(event.target.value)
                                     }}>
-                                        {coatingList.map((value, key) => {
-                                            if (key == 0) {
+                                        {coatingList.map((val, key) => {
+                                            if (key === 0) {
                                                 return (
-                                                    <option defaultValue={value.coatID} value={value.coatID} key={key}>{value.name}</option>
+                                                    <option defaultValue={val.coatID} value={val.coatID} key={key}>{val.name}</option>
                                                 )
                                             }
                                             else {
                                                 return (
-                                                    <option value={value.coatID} key={key}>{value.name}</option>
+                                                    <option value={val.coatID} key={key}>{val.name}</option>
                                                 )
                                             }
                                         })}
@@ -229,15 +231,15 @@ function AddCoil() {
                                     <select className="form-select col" onChange={event => {
                                         setHardness(event.target.value)
                                     }}>
-                                        {hardnessList.map((value, key) => {
-                                            if (key == 0) {
+                                        {hardnessList.map((val, key) => {
+                                            if (key === 0) {
                                                 return (
-                                                    <option defaultValue={value.sfID} value={value.sfID} key={key}>{value.name}</option>
+                                                    <option defaultValue={val.sfID} value={val.sfID} key={key}>{val.name}</option>
                                                 )
                                             }
                                             else {
                                                 return (
-                                                    <option value={value.sfID} key={key}>{value.name}</option>
+                                                    <option value={val.sfID} key={key}>{val.name}</option>
                                                 )
                                             }
                                         })}
@@ -282,13 +284,21 @@ function AddCoil() {
                 </div>
             </div>
 
+            <listContext.Provider value={{
+                vendorList,
+                setVendorList,
+                metalTypeList,
+                setMetalTypeList
+            }}>
             <VendorManage />
-            {/* <TypeManage />
-            <TemperManage />
+            <TypeManage />
+            {/* <TemperManage />
             <CoatingManage />
             <HardnessManage /> */}
+            </listContext.Provider>
         </>
     )
 }
 
+export { listContext }
 export default AddCoil;

@@ -1,92 +1,152 @@
-import { useState } from "react";
+import Axios from "axios"
+import { useState, useContext } from "react";
+import { listContext } from "../page/AddCoil";
+import editIcon from "../resource/pen.svg";
 
 function CoatingManage() {
 
-    const [coating, setCoating] = useState(0)
+    const url = "http://localhost:8080"
+
+    const addCoating = () => {
+        Axios({
+            method: "POST",
+            url: url + "/api/coating",
+            data: {
+                name: name
+            }
+        }).then((res) => {
+            if (res.data.success) {
+                setCoatingList([...coatingList, res.data.data])
+            }
+        })
+    }
+
+    const editCoating = (coatID) => {
+        Axios({
+            method: "PUT",
+            url: url + "/api/coating/" + coatID,
+            data: {
+                name: modalName
+            }
+        }).then((res) => {
+
+            if (res.data.success) {
+                const updateTemper = res.data.data.newCoating
+                setCoatingList(coatingList.map((val) => {
+                    return val.coatID === coatID ? {
+                        coatID: updateTemper.coatID,
+                        name: updateTemper.name
+                    } : val
+                }))
+            }
+        })
+    }
+
+    const deleteCoating = (coatID) => {
+        Axios({
+            method: "DELETE",
+            url: url + "/api/coating/" + coatID
+        }).then((res) => {
+            if (res.data.success) {
+                setCoatingList(coatingList.filter((val) => {
+                    return val.coatID !== coatID
+                }))
+            }
+        })
+    }
+
+    const { coatingList, setCoatingList } = useContext(listContext)
+
+    const [name, setName] = useState(0)
+
+    const [modalID, setModalID] = useState(0)
+    const [modalName, setModalName] = useState(0)
 
     return (
         <>
-            <div class="modal fade" id="coatingManage" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5">จัดการCoating</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div className="modal fade" id="coatingManage" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1">
+                <div className="modal-dialog modal-xl">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5">จัดการCoating</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <h4>เพิ่มประเภทCoating</h4>
                             <div className="row">
                                 <div className="col-6">
                                     <label>ชื่อประเภทCoating</label>
                                     <input className="form-control" onChange={event => {
-                                        setCoating(event.target.value)
+                                        setName(event.target.value)
                                     }}></input>
                                 </div>
                             </div>
                             <div className="text-end">
                                 <button className="btn btn-success my-2" onClick={event => {
-                                    console.log("test")
+                                    addCoating()
                                 }}>เพิ่ม</button>
                             </div>
                             <hr></hr>
                             <div className="m-3">
-                                <table class="table">
-                                    <thead class="thead-dark">
+                                <table className="table">
+                                    <thead className="thead-dark">
                                         <tr>
                                             <th>id</th>
-                                            <th>ชื่อผู้ผลิต</th>
-                                            <th>เบอร์โทรติดต่อ</th>
-                                            <th>email</th>
-                                            <th>ที่อยู่</th>
+                                            <th>ชื่อ Coating</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>TTP</td>
-                                            <td>02-xxx-xxxx</td>
-                                            <td>TTP@gmail.com</td>
-                                            <td>xxxxxxxxxxx</td>
-                                            <td>
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#editCoating">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                                    </svg>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                        {coatingList.map((val, key) => {
+                                            return (
+                                                <tr key={key}>
+                                                    <td>{val.coatID}</td>
+                                                    <td>{val.name}</td>
+                                                    <td>
+                                                        <a href="edit" data-bs-toggle="modal" data-bs-target="#editCoating" onClick={() => {
+                                                            setModalID(val.coatID)
+                                                            setModalName(val.name)
+                                                        }}>
+                                                            <img src={editIcon} alt="edit button"></img>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal fade" id="editCoating" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="0">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5">แก้ไขCoating</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div className="modal fade" id="editCoating" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="0">
+                <div className="modal-dialog modal-xl">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5">แก้ไขCoating</h1>
+                            <button type="button" className="btn-close" data-bs-toggle="modal" data-bs-target="#temperManage"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <div className="row">
                                 <div className="col-6">
-                                    <label>ชื่อประเภทCoating</label>
-                                    <input className="form-control" onChange={event => {
-                                        setCoating(event.target.value)
+                                    <label>ชื่อประเภท Coating</label>
+                                    <input className="form-control" value={modalName} onChange={event => {
+                                        setModalName(event.target.value)
                                     }}></input>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#coatingManage">แก้ไขผู้ผลิต</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#coatingManage">ลบผู้ผลิต</button>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target="#coatingManage" onClick={() => {
+                                editCoating(modalID)
+                            }}>แก้ไขผู้ผลิต</button>
+                            <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#coatingManage" onClick={() => {
+                                deleteCoating(modalID)
+                            }}>ลบผู้ผลิต</button>
                         </div>
                     </div>
                 </div>

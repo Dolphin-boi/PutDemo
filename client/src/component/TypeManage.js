@@ -17,44 +17,42 @@ function TypeManage() {
             }
         }).then((res) => {
             if (res.data.success) {
-                console.log(res.data)
                 setMetalTypeList([...metalTypeList, res.data.data])
             }
         })
     }
 
-    const editVendor = (vendorID) => {
+    const editMetalType = (MetalTypeID) => {
         Axios({
             method: "PUT",
-            url: url + "/api/vendor/" + vendorID,
+            url: url + "/api/metalType/" + MetalTypeID,
             data: {
                 name: modalName,
                 vendorID: modalVendor
             }
         }).then((res) => {
             if (res.data.success) {
-                const updateVendor = res.data.data.newvendor
-                setMetalTypeList(vendorList.map((val) => {
-                    return val.vendorID === vendorID ? {
-                        vendorID: updateVendor.vendorID,
-                        name: updateVendor.name,
-                        contact: updateVendor.contact,
-                        email: updateVendor.email,
-                        address: updateVendor.address
+                const updateMetalType = res.data.data.newmetalType
+                setMetalTypeList(metalTypeList.map((val) => {
+                    return val.typeID === MetalTypeID ? {
+                        typeID: updateMetalType.typeID,
+                        vendorID: updateMetalType.vendorID,
+                        name: updateMetalType.name,
+                        vendor: updateMetalType.vendor
                     } : val
                 }))
             }
         })
     }
 
-    const deleteVendor = (vendorID) => {
+    const deleteMetalType = (MetalTypeID) => {
         Axios({
             method: "DELETE",
-            url: url + "/api/vendor/" + vendorID
+            url: url + "/api/metalType/" + MetalTypeID
         }).then((res) => {
             if (res.data.success) {
-                setMetalTypeList(vendorList.filter((val) => {
-                    return val.vendorID !== vendorID
+                setMetalTypeList(metalTypeList.filter((val) => {
+                    return val.typeID !== MetalTypeID
                 }))
             }
         })
@@ -68,9 +66,6 @@ function TypeManage() {
     const [modalID, setModalID] = useState(0)
     const [modalVendor, setModalVendor] = useState(0)
     const [modalName, setModalName] = useState(0)
-
-
-    console.log(vendor, name)
 
     return (
         <>
@@ -136,7 +131,7 @@ function TypeManage() {
                                                         <a href="edit" data-bs-toggle="modal" data-bs-target="#editType" onClick={() => {
                                                             setModalID(val.typeID)
                                                             setModalName(val.name)
-                                                            setModalVendor(val.venderID)
+                                                            setModalVendor(val.vendor.vendorID)
                                                         }}>
                                                             <img src={editIcon} alt="edit button"></img>
                                                         </a>
@@ -160,31 +155,44 @@ function TypeManage() {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5">แก้ไขประเภท</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                            <button type="button" className="btn-close" data-bs-toggle="modal" data-bs-target="#typeManage"></button>
                         </div>
                         <div className="modal-body">
                             <div className="row">
                                 <div className="col">
                                     <label>ผู้ผลิต</label>
-                                    <select className="form-select col" onChange={event => {
-                                        setVendor(event.target.value)
+                                    <select className="form-select col" value={modalVendor} onChange={event => {
+                                        setModalVendor(event.target.value)
                                     }}>
-                                        <option defaultValue="0" value="0">ทั้งหมด</option>
-                                        <option value="TCC">TCC</option>
-                                        <option value="TTP">TTP</option>
+                                        {vendorList.map((val, key) => {
+                                            if (key === modalVendor) {
+                                                return (
+                                                    <option defaultValue={val.vendorID} value={val.vendorID} key={key}>{val.name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={val.vendorID} key={key}>{val.name}</option>
+                                                )
+                                            }
+                                        })}
                                     </select>
                                 </div>
                                 <div className="col">
                                     <label>ชื่อประเภทเหล็ก</label>
-                                    <input className="form-control" onChange={event => {
-                                        setName(event.target.value)
+                                    <input className="form-control" value={modalName} onChange={event => {
+                                        setModalName(event.target.value)
                                     }}></input>
                                 </div>
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target="#typeManage">แก้ไขผู้ผลิต</button>
-                            <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#typeManage">ลบผู้ผลิต</button>
+                            <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target="#typeManage" onClick={() => {
+                                editMetalType(modalID)
+                            }}>แก้ไขผู้ผลิต</button>
+                            <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#typeManage" onClick={() => {
+                                deleteMetalType(modalID)
+                            }}>ลบผู้ผลิต</button>
                         </div>
                     </div>
                 </div>

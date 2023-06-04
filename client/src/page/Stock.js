@@ -6,22 +6,58 @@ const coilContext = createContext()
 
 function Stock() {
 
+    process.env.TZ = 'Asia/Bangkok'
+
     const url = "http://localhost:8080"
 
     const getStockList = () => {
         Axios({
-          method: "GET",
-          url: url + "/api/coil"
+            method: "GET",
+            url: url + "/api/coil"
         }).then((res) => {
-          if (res.data.success) {
-            setCoilList(res.data.data)
-          }
+            if (res.data.success) {
+                setCoilList(res.data.data)
+            }
         })
-      }
+    }
 
-    process.env.TZ = 'Asia/Bangkok'
+    const getStatusList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/status"
+        }).then((res) => {
+            if (res.data.success) {
+                setStatusList(res.data.data)
+            }
+        })
+    }
+
+    const getVendorList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/vendor"
+        }).then((res) => {
+            if (res.data.success) {
+                setVendorList(res.data.data)
+            }
+        })
+    }
+
+    const getMetalTypeList = () => {
+        Axios({
+            method: "GET",
+            url: url + "/api/metalType"
+        }).then((res) => {
+            if (res.data.success) {
+                setMetalTypeList(res.data.data)
+            }
+        })
+    }
 
     const [coilList, setCoilList] = useState([])
+    const [statusList, setStatusList] = useState([])
+    const [vendorList, setVendorList] = useState([])
+    const [metalTypeList, setMetalTypeList] = useState([])
     const [status, setStatus] = useState(1)
     const [vendor, setVendor] = useState(0)
     const [metalType, setMetalType] = useState(0)
@@ -31,6 +67,10 @@ function Stock() {
 
     useEffect(() => {
         getStockList()
+        getStatusList()
+        getVendorList()
+        getMetalTypeList()
+        console.log("api")
     }, [])
     return (
         <div className="m-3 card">
@@ -46,8 +86,18 @@ function Stock() {
                         <select className="form-select" onChange={event => {
                             setStatus(event.target.value)
                         }}>
-                            <option defaultValue="1" value="1">คงคลัง</option>
-                            <option value="0">ขายแล้ว</option>
+                            {statusList.map((val, key) => {
+                                if (key === 0) {
+                                    return (
+                                        <option defaultValue={val.statusID} value={val.statusID} key={key}>{val.name}</option>
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <option value={val.statusID} key={key}>{val.name}</option>
+                                    )
+                                }
+                            })}
                         </select>
                     </div>
                     <div className="col">
@@ -55,9 +105,18 @@ function Stock() {
                         <select className="form-select col" onChange={event => {
                             setVendor(event.target.value)
                         }}>
-                            <option defaultValue="0" value="0">ทั้งหมด</option>
-                            <option value="TCC">TCC</option>
-                            <option value="TTP">TTP</option>
+                            {vendorList.map((val, key) => {
+                                if (key === 0) {
+                                    return (
+                                        <option defaultValue={val.vendorID} value={val.vendorID} key={key}>{val.name}</option>
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <option value={val.vendorID} key={key}>{val.name}</option>
+                                    )
+                                }
+                            })}
                         </select>
                     </div>
                     <div className="col">
@@ -65,16 +124,30 @@ function Stock() {
                         <select className="form-select col" onChange={event => {
                             setMetalType(event.target.value)
                         }}>
-                            <option defaultValue="0" value="0">ทั้งหมด</option>
-                            <option value="TPPC-TCC-BOSTON">TPPC-TCC-BOSTON</option>
-                            <option value="TPPC-TTP-TY">TPPC-TTP-TY</option>
+                            {metalTypeList.map((val, key) => {
+                                if (key === 0) {
+                                    return (
+                                        <option defaultValue={val.typeID} value={val.typeID} key={key}>{val.name}</option>
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <option value={val.typeID} key={key}>{val.name}</option>
+                                    )
+                                }
+                            })}
                         </select>
                     </div>
                 </form>
                 <button className="btn btn-primary">ค้นหา</button>
                 <hr></hr>
             </div>
-            <coilContext.Provider value={{coilList}}>
+            <coilContext.Provider value={{ 
+                coilList,
+                vendor,
+                status,
+                metalType
+                }}>
                 <Table />
             </coilContext.Provider>
         </div>

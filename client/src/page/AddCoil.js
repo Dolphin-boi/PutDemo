@@ -77,7 +77,7 @@ function AddCoil() {
             method: "POST",
             url: url + "/api/coil",
             data: {
-                name: metalTypeList[metalType].name + "-" + weight,
+                name: metalTypeList[metalType-1].name + "-" + weight,
                 thickness: thickness,
                 width: width,
                 length: lenght,
@@ -96,6 +96,8 @@ function AddCoil() {
         })
     }
 
+    
+
     const [vendorList, setVendorList] = useState([])
     const [metalTypeList, setMetalTypeList] = useState([])
     const [temperList, setTemperList] = useState([])
@@ -113,16 +115,13 @@ function AddCoil() {
     const [weight, setWeight] = useState(0)
 
     useEffect(() => {
-        // console.log(vendor, metalType, thickness, width, lenght, weight, temper, coating, hardness)
-    })
-
-    useEffect(() => {
         getVendorList()
         getMetalTypeList()
         getTemperList()
         getCoatingList()
         getHardnessList()
     }, [])
+
     return (
         <>
             <div className="m-3 card">
@@ -288,13 +287,19 @@ function AddCoil() {
                 vendorList,
                 setVendorList,
                 metalTypeList,
-                setMetalTypeList
+                setMetalTypeList,
+                temperList,
+                setTemperList,
+                coatingList,
+                setCoatingList,
+                hardnessList,
+                setHardnessList
             }}>
             <VendorManage />
             <TypeManage />
-            {/* <TemperManage />
+            <TemperManage />
             <CoatingManage />
-            <HardnessManage /> */}
+            <HardnessManage />
             </listContext.Provider>
         </>
     )

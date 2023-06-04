@@ -24,15 +24,15 @@ router
   })
   .put("/:id",async (req,res) => {
     try {
-        const coatingID = req.params.id
-        req.body.coatingID = coatingID
+        const coatID = req.params.id
+        req.body.coatID = coatID
         const bodyInfo = req.body
         let updateStatus = "update success"
-        const isUpdate = await coating.update({...bodyInfo},{ where:{coatingID}})
+        const isUpdate = await coating.update({...bodyInfo},{ where:{coatID}})
         if(isUpdate == 0){
           updateStatus = "data not change"
         }
-        const newCoating = await coat.findByPk(coatingID)
+        const newCoating = await coating.findByPk(coatID)
         successRes(res, {newCoating,updateStatus});
     } catch (error) {
         errorRes(res,error)
@@ -40,8 +40,8 @@ router
   })
   .delete("/:id",async (req,res) => {
     try {
-        const coatingID = req.params.id
-        const newCoating = await coating.destroy({where:{coatingID}})
+        const coatID = req.params.id
+        const newCoating = await coating.destroy({where:{coatID}})
         let deleteStatus = "delete status success"
         if(newCoating == 0 ){
             deleteStatus = "do not has this id"

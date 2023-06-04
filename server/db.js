@@ -29,6 +29,7 @@ db.sf = require("./models/sfModel")(sequelize,Sequelize);
 db.status = require("./models/statusModel")(sequelize, Sequelize);
 db.temper = require("./models/temperModel")(sequelize, Sequelize);
 db.vendor = require("./models/vendorModel")(sequelize, Sequelize);
+db.user = require("./models/userModel")(sequelize,Sequelize);
 
 
 //ส่วนนี้เป็นการตั้งต่า relation นะครับ โดยเป็นการบอกว่าใน 1 team มีได้หลาย player ง่ายๆ ก็คือ relation แบบ 1:M

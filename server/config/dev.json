@@ -4,5 +4,6 @@
         "db_Host": "localhost",
         "db_UserName": "root",
         "db_Password": ""
-    }
+    },
+    "SECRET_KEY":"test"
 }

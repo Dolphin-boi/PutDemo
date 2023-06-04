@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const { errorRes, successRes } = require("../common/response");
-const config = require("config");
-const dbConfig = config.get("dbConfig.db_Name");
 const db = require("../db");
 const { coil, metalType, vendor ,status } = db;
 

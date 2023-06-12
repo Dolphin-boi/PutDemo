@@ -8,7 +8,7 @@ const { status } = db;
 
 router
   .get("/", async (req, res) => {
-    console.log(req.user)
+    //console.log(req.user)
     try {
       const data = await status.findAll();
       successRes(res, data);

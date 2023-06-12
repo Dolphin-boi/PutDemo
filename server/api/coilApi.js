@@ -4,6 +4,8 @@ const { errorRes, successRes } = require("../common/response");
 const db = require("../db");
 const { coil, metalType, vendor ,status } = db;
 
+//add get all update time that equal to month that front send (filter)
+//add get all unsend status
 router
   .get("/", async (req, res) => {
     try {

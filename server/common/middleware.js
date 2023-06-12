@@ -48,6 +48,15 @@ async function userAuthorize(req, res, next) {
   }
  }
 }
+async function checkUserPasswordExpire(req,res,next){
+  const expireDate = new Date(req.user.dataValues.password_expire_date)
+  const currDate = new Date()
+  if (currDate<expireDate){
+    next()
+  }else{
+    return errorRes(res,"password expire","please update password",403)
+  }
+}
 function invalidToken (req, res) {
   const errMsg = 'INVALID TOKEN'
   const userText = JSON.stringify(req.user)
@@ -55,4 +64,4 @@ function invalidToken (req, res) {
   return errorRes(res, err, errMsg, 401)
 }
 
-module.exports = { notFound, onlyAdmin, notOnlyMember, userAuthorize ,Authorize , unHandleError}
+module.exports = { notFound, onlyAdmin, notOnlyMember, userAuthorize ,Authorize , unHandleError,checkUserPasswordExpire}

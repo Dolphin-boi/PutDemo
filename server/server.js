@@ -22,7 +22,7 @@ const db = require('./db');
 const { vendor, coating } = require("./db");
 const {coil,metalType} = db
 
-const {notFound,unHandleError} = require('./common/middleware')
+const {notFound,unHandleError,checkUserPasswordExpire} = require('./common/middleware')
 // const sequelize = new Sequelize(
 //   dbConfig.db_Name,
 //   dbConfig.db_UserName,
@@ -58,7 +58,7 @@ app
   .use(cors("*"))
   .use(express.json())
   .use('/api/coil',coilApi)
-  .use('/api/status',passport.authenticate('jwt',{session:false}),statusApi)
+  .use('/api/status',passport.authenticate('jwt',{session:false}),checkUserPasswordExpire,statusApi)
   .use('/api/coating',coatingApi)
   .use('/api/location',locationApi)
   .use('/api/metalType',metalTypeApi)

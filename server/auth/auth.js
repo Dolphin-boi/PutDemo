@@ -11,7 +11,7 @@ const db = require('../db')
 const {user} = db
 const {compareUserPassword} = require('../service/userService')
 
-passport.use(
+passport.use( //add check user change password date if password is unchange for three month send error and send some status
     new localStrategy(
       {
         usernameField: 'username',
@@ -25,11 +25,11 @@ passport.use(
             return cb(null, false, {message: 'User not found'})
           }
           
-          const comparePass = (str1,str2) => {
-            return str1==str2
-          }
-          const validate = comparePass(userObj.password,password)
-          //const validate = await compareUserPassword(userObj,password)
+          // const comparePass = (str1,str2) => {
+          //   return str1==str2
+          // }
+          // const validate = comparePass(userObj.password,password)
+          const validate = await compareUserPassword(userObj,password)
   
           if (!validate) {
             return cb(null, false, {message: 'Wrong Password'})
@@ -50,10 +50,9 @@ passport.use(
     },
     async (jwtPayload, cb) => {
       //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-
-      const userId = jwtPayload.user_id
       try {
-        const userObj = await user.findByPk(2)
+        const userId = jwtPayload.user_id
+        const userObj = await user.findByPk(userId)
         if (userObj){
           return cb(null, userObj)
         }else{

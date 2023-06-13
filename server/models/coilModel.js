@@ -16,7 +16,10 @@ module.exports = ( sequelize , Sequelize ) => {
           updateTime: { type: Sequelize.DATE , allowNull: true, field: 'updateTime' },
       },
       {
-          tableName: 'coil' 
+        timestamps:true,
+        createdAt:'createTime',
+        updatedAt:'updateTime',
+        tableName: 'coil' 
       }
     );
     

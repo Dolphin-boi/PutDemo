@@ -65,8 +65,24 @@ router
         } catch (error) {
           errorRes(res,error)
         }
-
-        
+      })
+      .post('/addUser',async(req,res)=>{
+        try {
+          const bodyInfo = req.body
+          const user_name = bodyInfo.username
+          const password = await hashUserPassword(bodyInfo.password)
+          const currDate = new Date()
+          const expDate = new Date(currDate.setMonth(currDate.getMonth()+3));
+          userData = {}
+          userData.user_name = user_name
+          userData.password = password
+          userData.password_expire_date = expDate
+          const userObj = await user.create({...userData})
+          userObj.password = null
+          successRes(res, userObj);
+        } catch (error) {
+          errorRes(res,error)
+        }
       })
 
 module.exports = router;

@@ -3,9 +3,8 @@ const router = express.Router();
 const { errorRes, successRes } = require("../common/response");
 const db = require("../db");
 const { coil, metalType, vendor ,status } = db;
-
+//sarup raiduen
 //add get all update time that equal to month that front send (filter)
-//add get all unsend status
 router
   .get("/", async (req, res) => {
     try {
@@ -22,6 +21,19 @@ router
       if (filterData.metalType) {
         filterObj.typeID = filterData.metalType;
         //console.log(filterObj.typeID);
+      }
+      if (filterData.month && filterData.year){
+        filterObj.updateTime = {
+          [db.Sequelize.Op.and]: [
+            db.sequelize.where(db.sequelize.fn('MONTH', db.sequelize.col('updateTime')),filterData.month),
+            db.sequelize.where(db.sequelize.fn('YEAR', db.sequelize.col('updateTime')),filterData.year)
+          ]
+        }
+      }else if (filterData.month) {
+        //filterObj.updateTime = db.sequelize.literal(`MONTH(updateTime) = ${filterData.month}`);
+        filterObj.updateTime = db.sequelize.where(db.sequelize.fn('MONTH', db.sequelize.col('updateTime')),filterData.month);
+      }else if (filterData.year) {
+        filterObj.updateTime = db.sequelize.where(db.sequelize.fn('YEAR', db.sequelize.col('updateTime')),filterData.year);
       }
       const data = await coil.findAll({
         include: [

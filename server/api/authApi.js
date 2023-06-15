@@ -4,14 +4,25 @@ const jwt = require('jsonwebtoken')
 const config = require("config");
 const SECRET = config.get("SECRET_KEY");
 const passport = require("passport")
+const joi = require("joi")
 
 const { errorRes, successRes } = require("../common/response");
 const db = require("../db");
 const {user} = db;
-const {hashUserPassword} = require("../service/userService")
+const {hashUserPassword,compareUserPassword} = require("../service/userService")
 //add change password api
 //need username and old password to change
 //must has admin path to change password without old password
+const addUserSchema = joi.object({
+  username: joi.string().required(),
+  password: joi.string().required()
+})
+const changePasswordSchema = joi.object({
+  username: joi.string().required(),
+  password: joi.string().required(),
+  oldPassword: joi.string().required()
+
+})
 router
     .post('/login', (req, res, next) => {
         passport.authenticate(
@@ -47,19 +58,29 @@ router
       })
       .put('/changePassword',async (req,res)=>{
         try {
-          const bodyInfo = req.body
+          const value = await changePasswordSchema.validateAsync(req.body)
+          const bodyInfo = value
           const user_name = bodyInfo.username
+          const oldPassword = bodyInfo.oldPassword
           const hashPassword = await hashUserPassword(bodyInfo.password)
           const userObj = await user.findOne({where:{user_name}})
           if(!userObj){
-            errorRes(res,"user not found")
+            return errorRes(res,"user not found")
           }else{
+            const isOldEqual = await compareUserPassword(userObj,oldPassword)
+            const isNewEqual = await compareUserPassword(userObj,bodyInfo.password)
+            if (!isOldEqual){
+              return errorRes(res,"old password not match")
+            }
+            if(isNewEqual){
+              return errorRes(res,'using old password')
+            }
             const currDate = new Date()
             const newDate = new Date(currDate.setMonth(currDate.getMonth()+3));
             userObj.password_expire_date = newDate
             userObj.password = hashPassword
             userObj.save()
-            successRes(res,"password has change")
+            return successRes(res,"password has change")
           }
 
         } catch (error) {
@@ -68,7 +89,8 @@ router
       })
       .post('/addUser',async(req,res)=>{
         try {
-          const bodyInfo = req.body
+          const value = await addUserSchema.validateAsync(req.body)
+          const bodyInfo = value
           const user_name = bodyInfo.username
           const password = await hashUserPassword(bodyInfo.password)
           const currDate = new Date()
@@ -79,9 +101,9 @@ router
           userData.password_expire_date = expDate
           const userObj = await user.create({...userData})
           userObj.password = null
-          successRes(res, userObj);
+          return successRes(res, userObj);
         } catch (error) {
-          errorRes(res,error)
+          return errorRes(res,error)
         }
       })
 

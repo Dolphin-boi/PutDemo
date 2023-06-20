@@ -24,7 +24,7 @@ const changePasswordSchema = joi.object({
 
 })
 router
-    .post('/login', (req, res, next) => {
+    .post('/login', (req, res, next) => { // add return user name and role
         passport.authenticate(
           'local',
           {session: false},

@@ -1,10 +1,20 @@
 const express = require("express");
 const router = express.Router();
+const joi = require("joi")
+
 const { errorRes, successRes } = require("../common/response");
 const db = require("../db");
 const { coil, metalType, vendor ,status } = db;
 //sarup raiduen
-//add get all update time that equal to month that front send (filter)
+
+// add extract coil api
+const postSchema = joi.object({
+  name: joi.string().required()
+})
+const splitWeightSchema = joi.object({
+  coilID: joi.number().required(),
+  weights: joi.array().items(joi.number().greater(0).required()).min(2).required()
+})
 router
   .get("/", async (req, res) => {
     try {
@@ -66,7 +76,9 @@ router
   })
   .post("/",async (req,res) => {
     try {
-        const bodyInfo = req.body
+        const value = await postSchema.validateAsync(req.body)
+        const bodyInfo = value
+        // find coil where name and weight if repeat return id 
         const newCoil = await coil.create({...bodyInfo})
         const newCoilFullData = await coil.findByPk(newCoil.coilID,{
           include: [
@@ -94,6 +106,9 @@ router
   })
   .put("/:id",async (req,res) => {
     try {
+        if (Object.keys(req.body).length === 0){
+          return errorRes(res,"no data")
+        } 
         const coilID = req.params.id
         req.body.coilID = coilID
         const bodyInfo = req.body
@@ -138,6 +153,36 @@ router
         successRes(res,deleteStatus)
     } catch (error) {
         errorRes(res,error)
+    }
+  })
+  .post("/splitWeight",async(req,res)=>{
+    const t = await db.sequelize.transaction();
+    try { //may be error if has id 
+      const value = await splitWeightSchema.validateAsync(req.body)
+      const bodyInfo = value
+      const coilObj = await coil.findByPk(bodyInfo.coilID)
+      if (!coilObj){
+        return errorRes(res,"coil not found")
+      }
+      let allWeight = 0
+      bodyInfo.weights.forEach(element => {
+        allWeight += element
+      });
+      if (allWeight != coilObj.weight){
+        return errorRes(res,"weights is not balance")
+      }
+      await coil.destroy({where:{coilID:coilObj.coilID},transaction:t})
+      const coilPlain = coilObj.get({plain:true})
+      for (const element of bodyInfo.weights) {
+        coilPlain.coilID = undefined
+        coilPlain.weight = element
+        await coil.create({...coilPlain},{transaction:t})
+      }
+      await t.commit();
+      return successRes(res,"split success")
+    } catch (error) {
+      await t.rollback()
+      errorRes(res,error)
     }
   })
 module.exports = router;

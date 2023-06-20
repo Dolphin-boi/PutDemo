@@ -31,16 +31,16 @@ async function userAuthorize(req, res, next) {
 }
  function Authorize(role) {// may change to array of role  if its admin check tel and address if null error
    return async(req,res,next)=>{
-  const token = req.cookies.jwt;
-  const payload = await jwtDecode(token);
-  const roleArray = role.split(',')
+  // const token = req.cookies.jwt;
+  // const payload = await jwtDecode(token);
+  //const roleArray = role.split(',')
+  const roleArray = role
   let hasMatchRole = false 
   roleArray.forEach(element => {
-    if(payload.role == element){
+    if(req.user.dataValues.user_type == element){
       hasMatchRole = true
     }
   })
-  //if (payload.role == role) {
   if (hasMatchRole) {
     next();
   } else {

@@ -49,7 +49,7 @@ router
             //   })
               return res
                 .status(200)
-                .json({message: 'login success', token:token})
+                .json({message: 'login success', token:token,userInfo:user})
             } else {
               return res.status(422).json(info)
             }

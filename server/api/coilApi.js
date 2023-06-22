@@ -158,6 +158,7 @@ router
   .post("/splitWeight",async(req,res)=>{
     const t = await db.sequelize.transaction();
     try { //may be error if has id 
+    // use jest to loop call transaction and check dead lock
       const value = await splitWeightSchema.validateAsync(req.body)
       const bodyInfo = value
       const coilObj = await coil.findByPk(bodyInfo.coilID)

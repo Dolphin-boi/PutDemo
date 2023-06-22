@@ -66,7 +66,7 @@ app
   .use('/api/temper',temperApi)
   .use('/api/vendor',vendorApi)
   .use('/api/auth',authApi)
-  //.use(unHandleError)
+  .use(unHandleError)
   .use(notFound)
 app.get("/test", async (req,res) => {
     info = await coil.findAll({include:[
